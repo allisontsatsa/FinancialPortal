@@ -1,0 +1,102 @@
+﻿@model FinancialPortal.Models.BankAccount
+
+@{
+    ViewBag.Title = "Create";
+}
+<style>
+    #register {
+        word-wrap: unset !important;
+    }
+
+    #box {
+        margin-left: 500px
+    }
+
+    #regbutt {
+        background-color: #fcc6cc;
+    }
+</style>
+<body class="hold-transition login-page">
+    <div class="login-box" id="box">
+        <!-- /.login-logo -->
+        <div class="card" id="register">
+            <div class="card-body login-card-body">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4>Add Bank Account</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BankAccountType, "Account Type", new { @class = "control-label col-md-6" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("BankAccountTypeId", null, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BankAccountType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @*<div class="form-group">
+                                @Html.LabelFor(model => model.OwnerId, "Owner", new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.OwnerId, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.OwnerId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                        @*<div class="form-group">
+                                @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, "Account Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @*<div class="form-group">
+                            @Html.LabelFor(model => model.StartingBalance, "Starting Balance", htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.StartingBalance, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.StartingBalance, "", new { @class = "text-danger" })
+                            </div>
+                        </div>*@
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CurrentBalance, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.CurrentBalance, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CurrentBalance, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.LowBalance, "Low Balance Warning", htmlAttributes: new { @class = "control-label col-md-9" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.LowBalance, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.LowBalance, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-default" id="regbutt" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

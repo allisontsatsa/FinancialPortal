@@ -1,0 +1,576 @@
+﻿@using FinancialPortal.Extensions
+@model FinancialPortal.Models.Household
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<style>
+    #chartbutton {
+    }
+
+    #barChart {
+        background-color: rgba(0, 0, 0, 0.84);
+    }
+</style>
+<div class="content-wrapper" style="padding-right: 20px; padding-left: 20px;">
+    @*<div class="container">*@
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                @foreach (var account in Model.BankAccounts)
+                {
+                    <div class="col-lg-3 col-3">
+                        <!-- small box -->
+                        <div class="small-box bg-gradient-primary">
+                            <div class="inner" id="boxtitle">
+                                <h2 style="color: #343a40">@account.BankAccountType.Type</h2>
+
+                                <h4 style="color: #ffffff">$<span class="counter">@account.CurrentBalance</span></h4>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="@Url.Action("Details", "BankAccounts", new { id = account.Id })" class="small-box-footer" style="color: #343a40">Account Details <i class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+        <!-- BAR CHART -->
+        <div class="col-lg-6">
+            <div class="card card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title" style="color: #e2dede">Target Vs. Actual Spending by Category</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" id="carbod">
+                    <div class="chart">
+                        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; background-color: #ffffff"></canvas>
+                        <br />
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addCreditCategory" style="margin-left:85px">
+                                    <i class="fas fa-bar-chart"></i>
+                                    Add Credit Category
+                                </button>
+                            </div>
+                            <br />
+                            <div class="col-6">
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addDebitCategory">
+                                    <i class="fas fa-bar-chart"></i>
+                                    Add Debit Category
+                                </button>
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Household Members-->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title m-0" style="color: #e2dede">Household Members</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @foreach (var usermember in Model.Members)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm table-light" style="">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="avatar mr-2">
+                                                        <img src="@usermember.AvatarPath" class="img-fluid rounded-circle" alt="" data-toggle="modal" data-target="#changeAvatar" data-id="@User.Identity.GetHouseholdId()" data-placement="right" title="Change Avatar">
+
+                                                        @*@if (User.IsInRole("Head"))
+                                                            {
+                                                                <p>Head of Household</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>Member</p>
+                                                            }*@
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <p>@usermember.FirstName</p>
+                                                </div>
+                                                <div class="col">
+                                                    <p> @usermember.Email</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        @if (User.IsInRole("Head"))
+                                        {
+                                            <td class="tx-right align-middle">
+                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#removeMember" data-id="@usermember.Id">
+                                                    <i class="fas fa-dollar"></i>Remove
+                                                </button>
+                                            </td>
+                                        }
+                                        @*<td class="tx-right align-middle">
+                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#inviteMember">
+                                                    <i class="fas fa-dollar"></i>
+                                                    Invite Member
+                                                </button>
+                                            </td>*@
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- /.col-md-6 -->
+        <!--Recent Transactions Table-->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title m-0" style="color: #e2dede">Recent Transactions</h5>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @*<h6 class="card-title">Table Here</h6>*@
+                    <table class="table table-sm table-hover table-light">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Account
+                                </th>
+                                <th>
+                                    Category
+                                </th>
+                                @*<th>
+                                        Memo
+                                    </th>*@
+                                <th>
+                                    Member
+                                </th>
+                                <th>
+                                    Transaction
+                                </th>
+                                <th>
+                                    Amount
+                                </th>
+                                <th>
+                                    Date/Time
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.Members)
+                            {
+                                foreach (var transaction in user.Transactions.OrderByDescending(d => d.Created))
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => transaction.BankAccount.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => transaction.CategoryItem.Name)
+                                        </td>
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => transaction.Memo)
+                                            </td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => transaction.Owner.FirstName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => transaction.TransactionType.Type)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => transaction.Amount)
+                                        </td>
+                                        <td>
+                                            @transaction.Created.ToString("MM/dd/yyyy")
+                                        </td>
+                                        <td>
+                                            <p style="color:#20c997">  @Html.ActionLink("Details", "Details", new { id = transaction.Id })</p>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <div class="col-12">
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addTransaction">
+                            <i class="fas fa-dollar"></i>
+                            Add Transaction
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!--Account Balance Pie Chart-->
+            <div class="card card-secondary">
+                <div class="card-header" style="color:white">
+                    <h3 class="card-title" style="color: #e2dede">Balance By Account</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="donutChart" style="min-height: 150px; height: 150px; max-height: 150px; background-color: #ffffff"></canvas>
+                    @*<a href="" class="btn" id="chartbutton"><i class="fas fa-chart-pie"></i> See Stuff</a>*@
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@*Modals Add Transaction*@
+<div class"container">
+    <div class="modal fade" id="addTransaction">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" color="dark">
+                    <h4 class="modal-title">Add Transaction</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    @using (Html.BeginForm("AddTransaction", "Transactions", FormMethod.Post, new { id = "form-add-transaction" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("accountId", Model.Id)
+                        <div class="row no-gutters">
+                            <div class="col-md-12">
+                                @Html.Label("Amount", htmlAttributes: new { @class = "control-label" })
+                                <div class="col-md-12 input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text form-control">$</span>
+                                    </div>
+                                    <input type="text" @*class="form-control"*@ name="amount" required />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text form-control"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Transaction Type", htmlAttributes: new { @class = "control-label" })
+                                <div class="col-md-12">
+                                    @Html.DropDownList("TransactionTypeId", null, new { @class = "form-control", required = "" })
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @Html.Label("Bank Account", htmlAttributes: new { @class = "control-label" })
+                                <div class="col-md-12">
+                                    @Html.DropDownList("BankAccountId", null, new { @class = "form-control", required = "" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                @Html.Label("Category Item", htmlAttributes: new { @class = "control-label" })
+                                <div class="col-md-12">
+                                    @Html.DropDownList("CategoryItemId", null, new { @class = "form-control", required = "" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                @Html.Label("Memo", htmlAttributes: new { @class = "control-label" })
+                                <div class="col-md-12">
+                                    <input type="text" class="form-control" name="memo" />
+                                </div>
+                            </div>
+                            <div class="col-auto ml-auto align-self-end">
+                                <button type="submit" class="btn btn-secondary">Add</button>
+                            </div>
+                        </div>
+                    }
+                    <br />
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Add Debit Category Modal-->
+<div class"container">
+    <div class="modal fade" id="addDebitCategory">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" color="dark">
+                    <h4 class="modal-title">Add Debit Category</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("CreateDebitCategory", "Categories", FormMethod.Post, new { id = "form-add-category" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="name" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="description" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Target Amount", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-12 input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text form-control">$</span>
+                                    </div>
+                                    <input type="text" @*class="form-control"*@ name="target" required />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text form-control">.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <button type="submit" class="btn btn-secondary">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @*<div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Add Credit Category Modal-->
+<div class"container">
+    <div class="modal fade" id="addCreditCategory">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" color="dark">
+                    <h4 class="modal-title">Add Credit Category</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("CreateCreditCategory", "Categories", FormMethod.Post, new { id = "form-add-category" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="form-group">
+                                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="name" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Description", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="description" />
+                                </div>
+                            </div>
+                            <br />
+                            <div class="col-auto ml-auto align-self-end">
+                                <button type="submit" class="btn btn-secondary">Add</button>
+                            </div>
+                        </div>
+                    }
+
+                    @*<div class="modal-footer justify-content-between">*@
+                    @*<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*//Remove Member Modal*@
+<div class"container">
+    <div class="modal fade" id="removeMember">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" color="dark">
+                    <h4 class="modal-title">Remove Member From Household</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div>
+                        @using (Html.BeginForm("RemoveHHMember", "Households", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken();
+                            @Html.Hidden("userId", null)
+
+
+                            <p>Are you sure you want to remove this member?</p>
+                            <br />
+                            <input type="submit" value="Remove" class="btn btn-default" />
+
+                        }
+                        @*<a href="#" id="hhmember">OK</a>*@
+                    </div>
+                </div>
+                @*/.modal-content*@
+            </div>
+            @*/.modal-dialog*@
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script>
+        $('#removeMember').on('show.bs.modal', function (e) {
+            var modalId = $(e.relatedTarget).data('id');
+            //$('#userId').attr('href', '@Url.Action("RemoveHHMember","Households")?userId=' + modalId);
+            $('#userId').attr('value', modalId);
+
+            //$('#hhmember').text('Member Id: ' + modalId);
+
+         });
+    </script>
+
+}
+@*Invite Member Modal
+    <div class"container">
+        <div class="modal fade" id="inviteMember">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header" color="dark">
+                        <h4 class="modal-title">Invite Member To Household</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        @using (Html.BeginForm("CreateAsync", "Invites"))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                <h4>Invite</h4>
+                                <hr />
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.RecipientEmail, "Receipient Email", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.TextBoxFor(model => model.RecipientEmail, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.RecipientEmail, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Create" class="btn btn-default" />
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary">Save changes</button>
+                        </div>
+                    </div>
+                    /.modal-content
+                </div>
+                /.modal-dialog
+            </div>
+        </div>
+    </div>*@
+
+
+
+<!-- /.col-md-6 -->
+<!-- /.row -->
+<!-- /.container-fluid -->
+@*Today's Earnings Start
+        ================================
+        <div class="card mg-b-20">
+            <div class="card-body pd-y-0">
+                <div class="custom-fieldset mb-4">
+                    <div class="clearfix">
+                        <label>Today Earnings</label>
+                    </div>
+                    <div class="d-flex align-items-center text-dark">
+                        <div class="wd-40 wd-md-50 ht-40 ht-md-50 mg-r-10 mg-md-r-10 d-flex align-items-center justify-content-center rounded card-icon-success">
+                            <i class="icon-diamond tx-success tx-20"></i>
+                        </div>
+                        <div>
+                            <h2 class="tx-20 tx-sm-18 tx-md-24 mb-0 mt-2 mt-sm-0 tx-normal tx-rubik tx-dark">$<span class="counter">1,500</span><small class="tx-15">.50</small></h2>
+                            <div class="d-flex align-items-center tx-gray-500"><span class="text-danger mr-2 d-flex align-items-center"><i class="ion-android-arrow-down mr-1"></i>-310</span>avg. sales</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+<!-- Members End -->
+@*@foreach (var account in Model.BankAccounts.ToList())
+    {
+        <div class="col-md-6">@account.Name</div>
+        <div class="col-md-6">@account.Balance</div>
+    }
+
+    @if (Model.Notifications == 0)
+    @foreach (var notification in Model.Notifications)
+    {
+        <div class="col-md-6">@notification.Created</div>
+        <div class="col-md-6">@notification.Body</div>
+    }*@

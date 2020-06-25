@@ -1,0 +1,115 @@
+﻿@{ Layout = null; }
+
+@model FinancialPortal.Models.ExtendedRegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Font Awesome Icons -->
+        <link href="~/Content/all.css" rel="stylesheet" />
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+        <link href="~/Content/icheck-bootstrap.min.css" rel="stylesheet" />
+        <!-- overlayScrollbars -->
+        <link href="~/Content/OverlayScrollbars.min.css" rel="stylesheet" />
+        <!-- Theme style -->
+        <link href="~/Content/adminlte.min.css" rel="stylesheet" />
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    </head>
+<style>
+    #register {
+        word-wrap: normal !important;
+    }
+    #regbutt {
+        background-color: #fcc6cc;
+    }
+    body {
+        background-image: url('../../Images/AdobeStock_201376236.jpeg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 95%;
+        background-position: center;
+        ;
+    }
+</style>
+@*<h2>@ViewBag.Title.</h2>*@
+<body class="hold-transition register-page">
+    <div class="register-box">
+        <div class="register-logo">
+            @*<a href="/Account/Login"><b>This Little Piggy Bank</b></a>*@
+        </div>
+        <div class="card" id="register">
+            <div class="card-body register-card-body">
+                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.Code)
+                    <h4>Create a new account.</h4>
+                    <hr />
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    if (ViewBag.HouseholdId != null)
+                    {
+                        @Html.Hidden("HouseholdId", (int)ViewBag.HouseholdId)
+                    }
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.FirstName, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.LastName, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                        <div class="col-md-10">
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" class="btn btn-default" value="Register" id="regbutt"/>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/Scripts/adminlte.min.js"></script>
+</body>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,98 @@
+﻿@model FinancialPortal.Models.Household
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+</head>
+
+<div class="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title m-0" style="color: #e2dede">Create Household</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title" style="color: #e2dede">Create a new household to track your expenses.</h6>
+                        <br />
+                        <br />
+                        <a href="@Url.Action("Create","Households")" class="btn accent-secondary">Create</a>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title m-0">Join A Household</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">Use your invite to join an existing household.</h6>
+
+                        <p class="card-text">Put a table here</p>
+                        <a href="@Url.Action("Create", "Invites")" class="btn accent-secondary">Join</a>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+
+@*@if (User.IsInRole("Head") || User.IsInRole("Member"))
+    {
+        @ViewBag.Title = "Household Dashboard";
+    }
+    @if (User.IsInRole("Head") || User.IsInRole("Member"))
+    {
+    <div class"row">
+        <div class="col h3 text-center">Welcome to the @Model.Name house.</h2>
+        <div class="col h3 text-center">@Model.Greeting</h3>
+        </div>
+        if (User.IsInRole("Head"))
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <button data-toggle="modal" data-target="#inviteMember" class="btn btnWide btn-secondary">Invite New Member</button>
+                </div>
+            </div>
+        }
+
+        foreach (var person in Model.Members)
+        {
+            <div class="row">
+                <div class="col-md-6">@person.FirstName @person.LastName</div>
+            </div>
+        }
+    else
+        {
+            @ViewBag.Title = "Lobby";
+        }*@
+@section scripts{
+    <script>
+
+
+    </script>
+}
+
+@*Small boxes (Stat box)
+    <div class="row">
+        <div class="col-lg-3 col-6">
+             small box
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>150</h3>
+
+                    <p>New Orders</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+        </div>*@

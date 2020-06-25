@@ -1,0 +1,92 @@
+﻿@model FinancialPortal.Models.Transaction
+
+@{
+    ViewBag.Title = "Delete";
+}
+    <style>
+        #register {
+            word-wrap: unset !important;
+        }
+
+        #box {
+            margin-left: 500px
+        }
+
+        #regbutt {
+            background-color: #fcc6cc;
+        }
+    </style>
+<body class="hold-transition login-page">
+    <div class="login-box" id="box">
+        <!-- /.login-logo -->
+        <div class="card" id="register">
+            <div class="card-body login-card-body">
+
+                <h3>Are you sure you want to delete this?</h3>
+                <div>
+                    <hr />
+                    <dl class="dl-horizontal">
+                        <dt>
+                           Bank Account Type
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.BankAccount.BankAccountType)
+                        </dd>
+
+                        <dt>
+                            Spending Category
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.CategoryItem.Name)
+                        </dd>
+
+                        <dt>
+                            Account Owner
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Owner.FirstName)
+                        </dd>
+
+                        <dt>
+                            Type
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.TransactionType.Type)
+                        </dd>
+
+                        <dt>
+                            Amount
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Amount)
+                        </dd>
+
+                        <dt>
+                            Created
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Created)
+                        </dd>
+
+                    </dl>
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Delete" class="btn btn-default" /> |
+                            @Html.ActionLink("Back to List", "Index")
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

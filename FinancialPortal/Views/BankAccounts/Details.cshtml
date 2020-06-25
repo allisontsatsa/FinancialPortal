@@ -1,0 +1,126 @@
+﻿@model FinancialPortal.Models.BankAccount
+
+@{
+    ViewBag.Title = "Details";
+}
+    <div class="container">
+        <h4>Account Details</h4>
+  
+        <table class="notMytable table" style="line-height: 1.5" table-width="100%">
+            <thead>
+                <tr>
+                    <th>
+                        Account Type
+                    </th>
+                    @*<th>
+                       Account Owner
+                    </th>*@
+                    <th>
+                        Created Date
+                    </th>
+                    <th>
+                        Account Name
+                    </th>
+                    @*<th>
+                        Starting Balance
+                    </th>*@
+                    <th>
+                        Current Balance
+                    </th>
+                    <th>
+                        Low Balance
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        @Model.BankAccountType.Type
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(model => model.OwnerId)
+                    </td>*@
+                    <td>
+                        @Model.Created.Date.ToString("MM/dd/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Name)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(model => model.StartingBalance)
+                    </td>*@
+                    <td>
+                        @Model.CurrentBalance.ToString("N")
+                    </td>
+                    <td>
+                        @Model.LowBalance.ToString("N")
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <br />
+        <br />
+
+        <table class="table table-sm table-hover table-dark myTable">
+            <thead>
+                <tr>
+                    <th>
+                        Bank Account
+                    </th>
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        Memo
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Transaction Type
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+                    <th>
+                        Date/Time
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Transactions)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BankAccount.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryItem.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Memo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Owner.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TransactionType.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Model.Created.Date.ToString("MM/dd/yyyy")
+                        </td>
+                        <td>
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>

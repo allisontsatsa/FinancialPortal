@@ -1,0 +1,95 @@
+﻿@model FinancialPortal.Models.Transaction
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    #register {
+        word-wrap: unset !important;
+    }
+
+    #box {
+        margin-left: 500px
+    }
+
+    #regbutt {
+        background-color: #fcc6cc;
+    }
+</style>
+<body class="hold-transition login-page">
+    <div class="login-box" id="box">
+        <!-- /.login-logo -->
+        <div class="card" id="register">
+            <div class="card-body login-card-body">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4>Enter New Transaction</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.BankAccount, "Bank Account", htmlAttributes: new { @class = "control-label" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("BankAccountId", null,"--Select Account--", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.BankAccount, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.TransactionTypeId, "Transaction Type", new { @class = "control-label" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("TransactionTypeId", null, "--Transaction Type--", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.TransactionTypeId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @*<div class="form-group">
+                            @Html.LabelFor(model => model.CategoryId, "Category", htmlAttributes: new { @clss = "control-label" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>*@
+
+                        <div class="form-group">
+                                @Html.LabelFor(model => model.CategoryItemId, "Category Item", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.DropDownList("CategoryItemId", null, "--Category Item--", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.CategoryItemId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Memo, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.Memo, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Memo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div>
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

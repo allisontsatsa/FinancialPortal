@@ -1,0 +1,78 @@
+﻿@model IEnumerable<FinancialPortal.Models.BankAccount>
+
+@{
+    ViewBag.Title = "Index";
+}
+@*<style>
+        #boxtitle {
+            color: #FFC6CC;
+        }
+    </style>*@
+
+
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            Type Of Account
+        </th>
+        <th>
+            Household Name
+        </th>
+        <th>
+            Account Owner
+        </th>
+        <th>
+            Created
+        </th>
+        <th>
+            Account Name
+        </th>
+        <th>
+            Starting Balance
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.CurrentBalance)
+        </th>*@
+        <th>
+            Low Balance Warning
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @item.BankAccountTypeId
+    </td>
+    <td>
+        @item.Household.HouseName
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.OwnerId)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Created)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.StartingBalance)
+    </td>
+    @*<td>
+            @Html.DisplayFor(modelItem => item.CurrentBalance)
+        </td>*@
+    <td>
+        @Html.DisplayFor(modelItem => item.LowBalance)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+    </td>
+</tr>
+    }
+
+</table>

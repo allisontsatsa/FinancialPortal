@@ -1,0 +1,47 @@
+﻿@model FinancialPortal.Models.Household
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Household</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.HouseName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HouseName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Greeting)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Greeting)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Members)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Members)
+        </dd>
+
+    </dl>
+</div>
+
+@*//Dropdown list for household heads to remove members//
+<div class="form-group">
+    @Html.LabelFor(model => model.Members, "Member", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("MemberId", null, "--Select Member--", htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Members, "", new { @class = "text-danger" })
+    </div>
+</div>*@

@@ -1,0 +1,370 @@
+﻿@using FinancialPortal.Extensions
+@using FinancialPortal.Helpers
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>This Little Piggy Bank | Top Navigation + Sidebar</title>
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link href="~/Content/Chart.min.css" rel="stylesheet" />
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <!-- Theme style -->
+    <link href="~/Content/adminlte.min.css" rel="stylesheet" />
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link href="~/Content/Mine.css" rel="stylesheet" />
+
+    <style>
+        #username {
+            color: #20c997;
+        }
+    </style>
+</head>
+@{
+    var userHelper = new UserHelper();
+}
+<body class="hold-transition sidebar-collapse layout-top-nav">
+    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+    }
+
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+            @*<div class="container">*@
+            <div class="navbar-brand">
+                <img src="@User.Identity.GetUserAvatar()" alt="" class="brand-image img-circle elevation-3" btn btn-default data-toggle="modal" data-target="#changeAvatar" data-id="@User.Identity.GetHouseholdId()" @*data-toggle=""*@ data-placement="right" title="Change Avatar">
+                <span class="brand-text" id="username">@User.Identity.GetFullName()</span>
+            </div>
+
+            <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+                <!-- Left navbar links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="@Url.Action("Index", "Home")" class="nav-link"><i class="fas fa-home" style="color: #fcc6cc"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        @if (Request.IsAuthenticated)
+                        {
+                            <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()"><i class="fas fa-sign-out"></i>Log off</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" href="@Url.Action("Login", "Account")">Log in</a>
+
+                        }
+                    </li>
+                    @{
+                        var hhId = User.Identity.GetHouseholdId();
+
+
+                        if (hhId != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Actions</a>
+                                <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                                    <li class="dropdown-submenu dropdown-hover">
+                                        <a id="dropdownSubMenu2" href="@Url.Action("Dashboard", "Bankaccount")" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Bank Accounts</a>
+                                        <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-10 shadow">
+                                            <li>
+                                                <a tabindex="-1" href="@Url.Action("Dashboard", "BankAccounts")" class="dropdown-item">Dashboard</a>
+                                                @*<a tabindex="-1" href="@Url.Action("Create", "Transactions")" class="dropdown-item">Transactions</a>*@
+                                                <a tabindex="-1" href="@Url.Action("Create", "BankAccounts")" class="dropdown-item">Add Account</a>
+                                                <a tabindex="-1" href="@Url.Action("Edit", "BankAccounts")" class="dropdown-item">Edit Accounts</a>
+                                            </li>
+                                        </ul>
+                                    <li class="dropdown-divider"></li>
+                                    <li class="dropdown-submenu dropdown-hover">
+                                        <a id="dropdownSubMenu2" href="@Url.Action("Details", "Households", new { id = User.Identity.GetHouseholdId() })" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Household</a>
+                                        <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-20 shadow">
+                                            <li>
+                                                <a tabindex="-1" href="@Url.Action("Create", "Invites")" class="dropdown-item">Invite New Member</a>
+                                                <a tabindex="-1" href="@Url.Action("Edit", "Households", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Edit Current Members</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-divider"></li>
+                                    <li class="dropdown-submenu dropdown-hover">
+                                        <a id="dropdownSubMenu2" href="@Url.Action("Home", "Categories", new { id = User.Identity.GetHouseholdId() })" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Categories</a>
+                                        <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-20 shadow">
+                                            <li>
+                                                <a tabindex="-1" href="@Url.Action("CreateDebitCategory", "Categories")" class="dropdown-item">Create New Debit Category</a>
+                                                <a tabindex="-1" href="@Url.Action("CreateCreditCategory", "Categories")" class="dropdown-item">Create New Credit Category</a>
+
+                                                @*<a tabindex="-1" href="@Url.Action("Edit","Categories", new { id = User.Identity.GetHouseholdId()})" class="dropdown-item">Edit Categories</a>*@
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="dropdown-divider"></li>
+                                    <li class="dropdown-submenu dropdown-hover">
+                                        <a id="dropdownSubMenu2" href="@Url.Action("Home", "Account", new { id = User.Identity.GetHouseholdId() })" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">User Account</a>
+                                        <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-20 shadow">
+                                            <li>
+                                                <a tabindex="-1" href="@Url.Action("ChangePassword", "Manage")" class="dropdown-item">Change Password</a>
+                                                <a tabindex="-1" href="@Url.Action("", "", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Change Avatar</a>
+                                                <a tabindex="-1" href="@Url.Action("", "", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Change Email</a>
+
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                    }
+                </ul>
+
+                <!-- Right navbar links -->
+                <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+                    <!-- Messages Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="fas fa-concierge-bell"></i>
+                            <span class="badge badge-danger navbar-badge">@NotificationHelper.GetNotifications().Count</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <a href="#" class="dropdown-item">
+                                <!-- Message Start -->
+                                @foreach (var notification in NotificationHelper.GetNotifications())
+                                {
+
+                                    <div class="media">
+                                        <img src="@User.Identity.GetUserAvatar()" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                        <div class="media-body">
+                                            <h3 class="dropdown-item-title">
+                                                @notification.Subject
+                                                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                            </h3>
+                                            <p class="text-sm">@notification.Body</p>
+                                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i>@notification.Created.ToString("MMM dd, yyyy")</p>
+                                        </div>
+                                    </div>
+                                }
+
+                                <!-- Message End -->
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                        </div>
+                    </li>
+                    <form class="form-inline ml-0 ml-md-3">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-navbar" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Notifications Dropdown Menu -->
+                    @*<li class="nav-item">
+                            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+                                <i class="fas fa-th-large"></i>
+                            </a>
+                        </li>*@
+                </ul>
+                <!-- SEARCH FORM -->
+            </div>
+
+    </div>
+    </nav>
+    <!-- /.navbar -->
+    <!-- Main Sidebar Container -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container">
+                <div class="row mb-2">
+                    <div class="col">
+                        <h2 class="m-0 text-dark"><small><img src="" id="pig" /> This Little Piggy Bank</small></h2>
+                    </div><!-- /.col -->
+                    @*<a href="/Households/Create" class="btn" id="createbutton"><i class="fas fa-house-user"></i></a>*@
+
+                    <div class="col-sm-8">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            @*<li class="breadcrumb-item"><a href="#">Layout</a></li>*@
+                            @*<li class="breadcrumb-item"><a href="#"></a></li>*@
+                            <li class="breadcrumb-item active">Top Navigation</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+        <!-- Main content -->
+        <!-- /.content -->
+        @RenderBody()
+    </div>
+
+
+    <!--Change Avatar Modal-->
+    <div class"container">
+        <div class="modal fade" id="changeAvatar">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header" color="dark">
+                        <h4 class="modal-title">Change Avatar</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div>
+                            @using (Html.BeginForm("UpdateAvatar", "Manage", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-group">
+                                    <div class="col-3" style="align-self:center">
+                                        <div class="col-md-10">
+                                            <br />
+                                            <input type="file" name="Avatar" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-offset-2 col-md-8">
+                                    <input type="submit" value="Update Avatar" class="btn btn-secondary" />
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                    @*/.modal-content*@
+                </div>
+                @*/.modal-dialog*@
+            </div>
+        </div>
+    </div>
+
+
+    <!-- /.content-wrapper -->
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/counterup.min.js" type="module"></script>
+
+    <!-- Bootstrap 4 -->
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/Chart.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+    <!-- AdminLTE App -->
+    <script src="~/Scripts/adminlte.min.js"></script>
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('.myTable').DataTable();
+        });
+    </script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+    @*<script>
+        $(function () {
+            $('.counter').countUp();
+        });
+    </script>*@
+
+    <script>
+        $(document).ready(function () {
+
+            $('.counter').each(function () {
+                $(this).prop('Counter', 0).animate({
+                    Counter: $(this).text()
+                }, {
+                    duration: 4000,
+                    easing: 'swing',
+                    step: function (now) {
+                        $(this).text(Math.ceil(now));
+                    }
+                });
+            });
+
+        });
+    </script>
+
+    <script>
+            $(function () {
+                var barChartCanvas = $('#barChart').get(0).getContext('2d');
+                var barChartOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    datasetFill: false
+                };
+
+                // Get context with jQuery - using jQuery's .get() method.
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("GetSpendingChartData", "Charts")",
+                    dataType: "json"
+                }).then(function (response) {
+
+                    //Create bar chart
+                    var barChart = new Chart(barChartCanvas, {
+                        type: 'bar',
+                        data: response,
+                        options: barChartOptions
+                    });
+                });
+
+            var pieChartCanvas = $('#donutChart').get(0).getContext('2d');
+                var pieOptions = {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    options: {
+                        legend: {
+                            labels: {
+                                // This more specific font property overrides the global property
+                                fontColor: 'white'
+                            }
+                        }
+                    }
+                };
+           //var pieData;
+            // Get context with jQuery - using jQuery's .get() method.
+            $.ajax({
+                type: "GET",
+               url: "@Url.Action("AccountBalanceChartData", "Charts")",
+                dataType: "json"
+            }).then(function (response) {
+
+                // You can switch between pie and douhnut using the method below.
+                var pieChart = new Chart(pieChartCanvas, {
+                    type: 'pie',
+                    data: response,
+                    options: pieOptions,
+
+                });
+            });
+
+            });
+    </script>
+    @RenderSection("scripts", required: false)
+
+    </div>
+</body>
+</html>
+
