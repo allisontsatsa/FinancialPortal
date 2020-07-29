@@ -31,7 +31,7 @@ namespace FinancialPortal.Controllers
                 ViewBag.BankAccountId = new SelectList(accounts, "Id", "Name");
                 ViewBag.TransactionTypeId = new SelectList(db.TransactionTypes, "Id", "Type");
                 ViewBag.CategoryItemId = new SelectList(categoryItems, "Id", "Name");
-
+                ViewBag.MemberId = new SelectList(model.Members, "Id", "FullName");
             }
             return View(model);
         }

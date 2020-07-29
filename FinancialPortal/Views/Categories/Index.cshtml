@@ -1,8 +1,5 @@
-﻿@model FinancialPortal.ViewModels.CategoryViewModel
-<head>
-    <link href="~/Content/toastr.min.css" rel="stylesheet" />
-    <link href="~/Content/toastr.css" rel="stylesheet" />
-</head>
+﻿@using FinancialPortal.Helpers
+@model FinancialPortal.ViewModels.CategoryViewModel
 
 <style>
     #plus {
@@ -26,16 +23,16 @@
                         <!-- small box -->
                         <div class="small-box bg-gradient-primary">
                             <div class="inner" id="boxtitle">
-                                <h2 style="color: #343a40">@category.Name</h2>
+                                <h2 style="color: #343a40" class="cat-name">@category.Name</h2>
 
                                 Target Spending
 
-                                <h4 style="color: #ffffff">$<span class="counter">@category.TargetAmount.ToString("N2")</span></h4>
+                                <h4 style="color: #ffffff">$@category.TargetAmount.ToString("N2")</h4>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="" data-toggle="modal" data-target="#addCategoryItem" class="small-box-footer" style="color: blanchedalmond" data-id="@category.Id">
+                            <a href="" data-toggle="modal" data-target="#addCategoryItem" class="small-box-footer btn-cat-item" style="color: blanchedalmond" data-id="@category.Id">
                                 Add A Category Item
                             </a>
                         </div>
@@ -78,9 +75,9 @@
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <div class="small-box-footer" style="color: blanchedalmond">
-                                Credit Category
-                            </div>
+                            <a href="" data-toggle="modal" data-target="#addCategoryItem" class="small-box-footer btn-cat-item" style="color: blanchedalmond" data-id="@category.Id">
+                                Add A Category Item
+                            </a>
                         </div>
                     </div>
                 }
@@ -226,12 +223,7 @@
                 <div class="modal-body">
                     Assigned to Category
 
-                    @foreach (var category in Model.Categories)
-                    {
-                        <li>
-                            @category.Name
-                        </li>
-                    }
+                    <span id="cat-name"></span>
 
 
                     @using (Html.BeginForm("Create", "CategoryItems", FormMethod.Post, new { id = "form-add-categoryItem" }))
@@ -259,7 +251,7 @@
                             </div>
                             <br />
                             <div class="col-auto ml-auto align-self-end">
-                                <button type="submit" class="btn btn-secondary toastrDefaultInfo">Add</button>
+                                <a id="btn-submit" class="btn btn-secondary toastrDefaultInfo">Add</a>
                             </div>
                         </div>
                     }
@@ -271,7 +263,13 @@
 </div>
 
 @section scripts{
-    <script src="~/Scripts/toastr.min.js"></script>
+    <script>
+        $('.btn-cat-item').on('click', function () {
+            var text = $(this).closest('div').find('h2').text();
+            $('#cat-name').text(text)
+        })
+    </script>
+
     <script>
         $('#addCategoryItem').on('show.bs.modal', function (e) {
             var modalId = $(e.relatedTarget).data('id');
@@ -286,14 +284,19 @@
                 toast: true,
                 position: 'top-end',
                 showConfirmButton: false,
-                timer: 3000
+                timer: 2000
             });
-            //$('.toastrDefaultInfo').on("click", () => {
-            //    toaster["info"]("You have successfully added this category item.")
-            //});
-            $('#form-add-categoryItem').on("submit", function (e) {
-                e.preventDefault();
-                alert("hello")
-                toastr["error"]("There was an error updating your transaction.", "Update Error!")
-            })    </script>
+        })
+        $('#btn-submit').on("click", function () {
+            $('#form-add-categoryItem').submit()
+            toastr.info("You have successfully added this item.")
+        })
+
+    </script>
 }
+
+@*<a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", "BankAccounts", new { id = Model.Id })">
+        <i class="fas fa-pencil">
+        </i>
+        Edit Account
+    </a>*@

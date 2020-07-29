@@ -1,4 +1,6 @@
 ﻿@using FinancialPortal.Extensions
+@using FinancialPortal.Models
+@using Microsoft.AspNet.Identity
 @model FinancialPortal.Models.Household
 
 @{
@@ -10,6 +12,9 @@
         padding-top: 40px;
     }
 
+    div.table-responsive {
+        overflow: hidden;
+    }
 
     #barChart {
         background-color: rgba(0, 0, 0, 0.84);
@@ -98,24 +103,24 @@
                         <div class="table-responsive">
                             <table class="table table-sm table-light" style="">
                                 <tbody>
-                                    <tr>
+                                    <tr class="trex">
                                         <td>
                                             <div class="row">
-                                                <div class="col">
+                                                <div class="col-3">
                                                     <div class="avatar mr-2">
                                                         <img src="@usermember.AvatarPath" class="img-fluid rounded-circle avatar-update" alt="" data-toggle="modal" data-target="#changeAvatar" data-id="@User.Identity.GetHouseholdId()" data-placement="right" title="Change Avatar">
                                                     </div>
                                                 </div>
 
-                                                <div class="col">
+                                                <div class="col-3">
                                                     <p>@usermember.FirstName</p>
                                                 </div>
-                                                <div class="col">
+                                                <div class="col-5">
                                                     <p> @usermember.Email</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        @if (User.IsInRole("Head"))
+                                        @if (User.IsInRole("Head") && usermember.Id != User.Identity.GetUserId())
                                         {
                                             <td class="tx-right align-middle">
                                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#removeMember" data-id="@usermember.Id">
@@ -123,6 +128,16 @@
                                                 </button>
                                             </td>
                                         }
+
+                                        @if (User.IsInRole("Head") && usermember.Id == User.Identity.GetUserId())
+                                        {
+                                            <td class="tx-right align-middle">
+                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#transferHead" data-id="@usermember.Id">
+                                                    Transfer
+                                                </button>
+                                            </td>
+                                        }
+
                                         @*<td class="tx-right align-middle">
                                                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#inviteMember">
                                                     <i class="fas fa-dollar"></i>
@@ -179,37 +194,40 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var user in Model.Members)
-                            {
-                                foreach (var transaction in user.Transactions.OrderByDescending(d => d.Created))
+                            @*@foreach (var user in Model.Members)
                                 {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => transaction.BankAccount.Name)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => transaction.CategoryItem.Name)
-                                        </td>
-                                        @*<td>
-                                                @Html.DisplayFor(modelItem => transaction.Memo)
-                                            </td>*@
-                                        <td>
-                                            @Html.DisplayFor(modelItem => transaction.Owner.FirstName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => transaction.TransactionType.Type)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => transaction.Amount)
-                                        </td>
-                                        <td>
-                                            @transaction.Created.ToString("MM/dd/yyyy")
-                                        </td>
-                                        <td>
-                                            <p style="color:#20c997">  @Html.ActionLink("Details", "Details", "Transactions", new { id = transaction.Id }, null)</p>
-                                        </td>
-                                    </tr>
-                                }
+                                    foreach (var transaction in user.Transactions.OrderByDescending(d => d.Created))
+                                    {*@
+                            @foreach (var transaction in (List<Transaction>)ViewBag.Recent)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => transaction.BankAccount.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => transaction.CategoryItem.Name)
+                                    </td>
+                                    @*<td>
+                                            @Html.DisplayFor(modelItem => transaction.Memo)
+                                        </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => transaction.Owner.FirstName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => transaction.TransactionType.Type)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => transaction.Amount)
+                                    </td>
+                                    <td>
+                                        @transaction.Created.ToString("MM/dd/yyyy")
+                                    </td>
+                                    <td>
+                                        <p style="color:#20c997">  @Html.ActionLink("Details", "Details", "Transactions", new { id = transaction.Id }, null)</p>
+                                    </td>
+                                </tr>
+                                @*}
+                                    }*@
                             }
                         </tbody>
                     </table>
@@ -460,6 +478,41 @@
     </div>
 </div>
 
+<!--Transfer Modal-->
+<div class="container">
+    <div class="modal fade" id="transferHead">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" color="dark">
+                    <h4 class="modal-title">Transfer Head of Household</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div>
+                        @using (Html.BeginForm("TransferPower", "Households", FormMethod.Post, new { @class = "" }))
+                        {
+                            @Html.AntiForgeryToken();
+                            @Html.Hidden("userId", null)
+
+                            @Html.DropDownList("MemberId", "- Select Member -")
+
+                            <p>Are you sure you want to make this member the Head of Household?</p>
+                            <br />
+                            <input type="submit" value="Transfer" class="btn btn-secondary" />
+
+                        }
+                        @*<a href="#" id="hhmember">OK</a>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!--Add Bank Account Modal-->
 <div class"container">
     <div class="modal fade" id="addBankAccount">
@@ -535,7 +588,7 @@
             $('#userId').attr('value', modalId);
 
         });
-    </script>
+</script>
 
 
 <!--Sweet Alert Delete Account-->

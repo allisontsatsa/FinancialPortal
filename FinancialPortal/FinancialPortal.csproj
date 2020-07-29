@@ -186,6 +186,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Extensions\AuthorizeExtension.cs" />
+    <Compile Include="Helpers\CatHelper.cs" />
     <Compile Include="Helpers\HouseHelper.cs" />
     <Compile Include="Helpers\NotificationHelper.cs" />
     <Compile Include="Helpers\RolesHelper.cs" />

@@ -22,7 +22,7 @@ namespace FinancialPortal.Helpers
                     recentTrans.Add(transaction);
                 }
             }
-            return recentTrans.OrderByDescending(t => t.Created).Take(10).ToList();
+            return recentTrans.OrderByDescending(t => t.Created).Take(5).ToList();
         }
     }
 }

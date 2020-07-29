@@ -160,5 +160,28 @@ namespace FinancialPortal.Controllers
             }
             base.Dispose(disposing);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> TransferPower(string memberId)
+        {
+            var userId = User.Identity.GetUserId();
+
+            //Remove our role as Head of Household  Head
+            //Add the role of Member to former Head
+            rolesHelper.RemoveUserFromRole(userId, "Head");
+            rolesHelper.AddUserToRole(userId, "Member");
+
+            //Drop role from Member
+            //Add role of Head to former Member
+            rolesHelper.RemoveUserFromRole(memberId, "Member");
+            rolesHelper.AddUserToRole(memberId, "Head");
+
+           await HttpContext.RefreshAuthentication(db.Users.Find(userId));
+
+            //Reauthorize current user
+            return RedirectToAction("Index","Home");
+        }
     }
+    
 }

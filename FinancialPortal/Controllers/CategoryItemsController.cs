@@ -11,15 +11,19 @@ using FinancialPortal.Models;
 
 namespace FinancialPortal.Controllers
 {
+    [Authorize]
     public class CategoryItemsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: CategoryItems
+        
         public ActionResult Index()
         {
-            var categoryItems = db.CategoryItems.Include(c => c.Category);
-            return View(categoryItems.ToList());
+            var hhId = User.Identity.GetHouseholdId();
+            var categoryItems = db.Categories.Where(c => c.HouseholdId == hhId).SelectMany(c => c.CategoryItems).ToList();
+
+            return View(categoryItems);
         }
 
         // GET: CategoryItems/Details/5
@@ -42,7 +46,7 @@ namespace FinancialPortal.Controllers
         {
             var hhId = User.Identity.GetHouseholdId();
             ViewBag.CategoryId = new SelectList(db.Categories.Where(c => c.HouseholdId == hhId), "Id", "Name");
-            return View();
+            return View(new CategoryItem());
         }
 
         // POST: CategoryItems/Create

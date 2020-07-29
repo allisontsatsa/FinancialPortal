@@ -24,6 +24,9 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link href="~/Content/Mine.css" rel="stylesheet" />
 
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+
     <style>
         #username {
             color: #20c997;
@@ -197,10 +200,10 @@
                     @*<a href="/Households/Create" class="btn" id="createbutton"><i class="fas fa-house-user"></i></a>*@
 
                     @*<div class="col-sm-8">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        </ol>
-                    </div> /.col*@
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            </ol>
+                        </div> /.col*@
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
@@ -271,6 +274,8 @@
 
     <script src="//unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 
+    <script src="~/Scripts/toastr.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $('.myTable').DataTable();
@@ -284,22 +289,22 @@
     </script>
 
     @*<script>
-        $(document).ready(function () {
+            $(document).ready(function () {
 
-            $('.counter').each(function () {
-                $(this).prop('Counter', 0).animate({
-                    Counter: $(this).text()
-                }, {
-                    duration: 4000,
-                    easing: 'swing',
-                    step: function (now) {
-                        $(this).text(now.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
-                    }
+                $('.counter').each(function () {
+                    $(this).prop('Counter', 0).animate({
+                        Counter: $(this).text()
+                    }, {
+                        duration: 4000,
+                        easing: 'swing',
+                        step: function (now) {
+                            $(this).text(now.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
+                        }
+                    });
                 });
-            });
 
-        });
-    </script>*@
+            });
+        </script>*@
 
     <script>
             $(function () {
@@ -359,7 +364,7 @@
     </script>
     @RenderSection("scripts", required: false)
 
-    </div>
+   
 </body>
 </html>
 

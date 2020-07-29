@@ -32,11 +32,11 @@ namespace FinancialPortal.Controllers
             //Select first seven of the latest
             var categories = db.Categories.Where(c => c.HouseholdId == hhId && c.DebitCredit == false).ToList();  //False 'DebitCredit' indicates a Debit
 
-            foreach (var cat in categories)
+            foreach (var cat in categories) 
             {
 
                 var tTypeId = db.TransactionTypes.FirstOrDefault(t => t.Type == "Withdrawal").Id;
-                var totalActual = cat.CategoryItems.SelectMany(c => c.Transactions).Where(t => t.TransactionTypeId == tTypeId).Select(t => t.Amount).Sum();
+                var totalActual = cat.CategoryItems.SelectMany(c => c.Transactions).Where(t => t.TransactionTypeId == tTypeId).Where(t => t.Created.Month == DateTime.Now.Month).Select(t => t.Amount).Sum();
                 var totalTarget = cat.TargetAmount;
 
                 //Adding actual/target amounts to datasets
