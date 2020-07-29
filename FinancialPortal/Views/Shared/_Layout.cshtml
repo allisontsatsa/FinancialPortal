@@ -6,11 +6,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!--Favicon-->
+    <link rel="icon" href="~/Content/favicon-16x16.png" type="image/x-icon" />
 
     <title>This Little Piggy Bank | Top Navigation + Sidebar</title>
     @*@Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")*@
-
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <link href="~/Content/Chart.min.css" rel="stylesheet" />
@@ -84,7 +85,7 @@
                                                 <a tabindex="-1" href="@Url.Action("Dashboard", "BankAccounts")" class="dropdown-item">Dashboard</a>
                                                 @*<a tabindex="-1" href="@Url.Action("Create", "Transactions")" class="dropdown-item">Transactions</a>*@
                                                 <a tabindex="-1" href="@Url.Action("Create", "BankAccounts")" class="dropdown-item">Add Account</a>
-                                                <a tabindex="-1" href="@Url.Action("Edit", "BankAccounts")" class="dropdown-item">Edit Accounts</a>
+                                                @*<a tabindex="-1" href="@Url.Action("Edit", "BankAccounts")" class="dropdown-item">Edit Accounts</a>*@
                                             </li>
                                         </ul>
                                     <li class="dropdown-divider"></li>
@@ -93,7 +94,7 @@
                                         <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-20 shadow">
                                             <li>
                                                 <a tabindex="-1" href="@Url.Action("Create", "Invites")" class="dropdown-item">Invite New Member</a>
-                                                <a tabindex="-1" href="@Url.Action("Edit", "Households", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Edit Current Members</a>
+                                                @*<a tabindex="-1" href="@Url.Action("Edit", "Households", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Edit Current Members</a>*@
                                             </li>
                                         </ul>
                                     </li>
@@ -102,8 +103,8 @@
                                         <a id="dropdownSubMenu2" href="@Url.Action("Home", "Categories", new { id = User.Identity.GetHouseholdId() })" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Categories</a>
                                         <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-20 shadow">
                                             <li>
-                                                <a tabindex="-1" href="@Url.Action("CreateDebitCategory", "Categories")" class="dropdown-item">Create New Debit Category</a>
-                                                <a tabindex="-1" href="@Url.Action("CreateCreditCategory", "Categories")" class="dropdown-item">Create New Credit Category</a>
+                                                <a tabindex="-1" href="@Url.Action("Index", "Categories")" class="dropdown-item">Categories Dashboard</a>
+                                                @*<a tabindex="-1" href="@Url.Action("CreateCreditCategory", "Categories")" class="dropdown-item">Create New Credit Category</a>*@
 
                                                 @*<a tabindex="-1" href="@Url.Action("Edit","Categories", new { id = User.Identity.GetHouseholdId()})" class="dropdown-item">Edit Categories</a>*@
                                             </li>
@@ -115,8 +116,8 @@
                                         <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-20 shadow">
                                             <li>
                                                 <a tabindex="-1" href="@Url.Action("ChangePassword", "Manage")" class="dropdown-item">Change Password</a>
-                                                <a tabindex="-1" href="@Url.Action("", "", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Change Avatar</a>
-                                                <a tabindex="-1" href="@Url.Action("", "", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Change Email</a>
+                                                @*<a tabindex="-1" href="@Url.Action("", "", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Change Avatar</a>
+                                                    <a tabindex="-1" href="@Url.Action("", "", new { id = User.Identity.GetHouseholdId() })" class="dropdown-item">Change Email</a>*@
 
                                             </li>
                                         </ul>
@@ -195,21 +196,21 @@
                     </div><!-- /.col -->
                     @*<a href="/Households/Create" class="btn" id="createbutton"><i class="fas fa-house-user"></i></a>*@
 
-                    <div class="col-sm-8">
+                    @*<div class="col-sm-8">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            @*<li class="breadcrumb-item"><a href="#">Layout</a></li>*@
-                            @*<li class="breadcrumb-item"><a href="#"></a></li>*@
-                            <li class="breadcrumb-item active">Top Navigation</li>
                         </ol>
-                    </div><!-- /.col -->
+                    </div> /.col*@
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
         <!-- /.content-header -->
         <!-- Main content -->
         <!-- /.content -->
-        @RenderBody()
+
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
     </div>
 
 
@@ -262,13 +263,13 @@
     <!-- Bootstrap 4 -->
     <script src="~/Scripts/bootstrap.bundle.min.js"></script>
     <script src="~/Scripts/Chart.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 
     <!-- AdminLTE App -->
     <script src="~/Scripts/adminlte.min.js"></script>
-    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+    <script src="//unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 
-
+    <script src="//unpkg.com/ionicons@5.1.2/dist/ionicons.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -283,12 +284,6 @@
     </script>
 
     @*<script>
-        $(function () {
-            $('.counter').countUp();
-        });
-    </script>*@
-
-    <script>
         $(document).ready(function () {
 
             $('.counter').each(function () {
@@ -298,13 +293,13 @@
                     duration: 4000,
                     easing: 'swing',
                     step: function (now) {
-                        $(this).text(Math.ceil(now));
+                        $(this).text(now.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"));
                     }
                 });
             });
 
         });
-    </script>
+    </script>*@
 
     <script>
             $(function () {

@@ -2,7 +2,16 @@
 @{
     ViewBag.Title = "Dashboard";
 }
+<style>
+    #plus {
+        height: 138px !important;
+        padding-top: 40px;
+    }
 
+    #boxtitle {
+        height: 138px;
+    }
+</style>
 
 <div class="content">
     <div class="container">
@@ -13,7 +22,7 @@
 
             @foreach (var account in Model)
             {
-                <div class="col-lg-3 col-3">
+                <div class="col-lg-2 col-2">
                     <!-- small box -->
                     <div class="small-box bg-gradient-primary">
                         <div class="inner" id="boxtitle">
@@ -29,12 +38,82 @@
 
                 </div>
             }
+            <div class="col-lg-2 col-2" id="addbox">
+                <!-- small box -->
+                <div class="small-box bg-gradient-primary">
+                    <div class="addicon">
+                        <a href="" data-toggle="modal" data-target="#addBankAccount" class="fas fa-plus-circle fa-4x" style="margin-left: 55px; color:blanchedalmond" id="plus"></a>
+                    </div>
+                    <a href="" data-toggle="modal" data-target="#addBankAccount" class="small-box-footer" style="color: rgba(33,37, 41, 1);">
+                        Add Bank Account <i style="color: blanchedalmond" class="fas fa-question-circle" id="question" data-placement="right"
+                                            title="Add a new bank account to your household"></i>
+                    </a>
+                </div>
+            </div>
 
 
         </div>
     </div>
 </div>
 
+<div class"container">
+    <div class="modal fade" id="addBankAccount">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" color="dark">
+                    <h4 class="modal-title">Add Bank Account</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @using (Html.BeginForm("Create", "BankAccounts", FormMethod.Post, new { id = "form-add-bankAccount" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="form-group">
+                                @Html.Label("Account Type", new { @class = "control-label col-md-6" })
+                                <div class="col-md-10">
+                                    @*@Html.DropDownList("BankAccountTypeId", null, new { @class = "form-control" })*@
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Account Name", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="Name" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Current Balance", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <input type="text" @*class="form-control"*@ name="CurrentBalance" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Low Balance Warning", htmlAttributes: new { @class = "control-label col-md-9" })
+                                <div class="col-md-10">
+                                    <input type="text" @*class="form-control"*@ name="LowBalance" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Create Account" class="btn btn-secondary" id="regbutt" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @*<div class="col-lg-3 col-3">

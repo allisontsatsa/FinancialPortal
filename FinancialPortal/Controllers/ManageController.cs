@@ -242,6 +242,7 @@ namespace FinancialPortal.Controllers
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
                 TempData["EditMessage"] = $"Your information has been changed!";
+
                 return RedirectToAction("Index", "Home"/*new { Message = ManageMessageId.ChangePasswordSuccess }*/);
 
             }

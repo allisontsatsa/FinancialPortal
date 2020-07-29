@@ -20,13 +20,14 @@ namespace FinancialPortal.Controllers
         public ActionResult Index()
         {
             var bankAccounts = db.BankAccounts.Include(b => b.BankAccountType).Include(b => b.Household);
+
             return View(bankAccounts.ToList());
         }
         public ActionResult Dashboard()
         {
             var hhId = User.Identity.GetHouseholdId();
             var bankaccount = db.BankAccounts.Where(a => a.HouseholdId == hhId).ToList();
-
+      
             return View(bankaccount);
         }
 
@@ -58,7 +59,7 @@ namespace FinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BankAccountTypeId,OwnerId,Created,Name,StartingBalance,CurrentBalance,LowBalance")] BankAccount bankAccount)
+        public ActionResult Create(BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
@@ -71,11 +72,10 @@ namespace FinancialPortal.Controllers
                 bankAccount.Created = DateTime.Now;
                 db.BankAccounts.Add(bankAccount);
                 db.SaveChanges();
-                return RedirectToAction("Dashboard");
+                return RedirectToAction("Index", "Home");
             }
-
-            ViewBag.AccountTypeId = new SelectList(db.BankAccountTypes, "Id", "Type", bankAccount.BankAccountTypeId);
-            return View(bankAccount);
+            //add sweet alert for error with creating account 
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: BankAccounts/Edit/5
@@ -90,23 +90,24 @@ namespace FinancialPortal.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.AccountTypeId = new SelectList(db.BankAccountTypes, "Id", "Type", bankAccount.BankAccountTypeId);
+            ViewBag.BankAccountTypeId = new SelectList(db.BankAccountTypes, "Id", "Type", bankAccount.BankAccountTypeId);
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", bankAccount.HouseholdId);
             return View(bankAccount);
         }
-
+        
         // POST: BankAccounts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,HouseholdId,AccountTypeId,OwnerId,Created,Name,StartingBalance,CurrentBalance,LowBalance")] BankAccount bankAccount)
+        public ActionResult Edit([Bind(Include = "Id,HouseholdId,BankAccountTypeId,OwnerId,Name,CurrentBalance,LowBalance")] BankAccount bankAccount)
         {
             if (ModelState.IsValid)
             {
+
                 db.Entry(bankAccount).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.AccountTypeId = new SelectList(db.BankAccountTypes, "Id", "Type", bankAccount.BankAccountTypeId);
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", bankAccount.HouseholdId);

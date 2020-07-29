@@ -53,7 +53,7 @@ namespace FinancialPortal.Controllers
         // GET: Households/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new Household());
         }
 
         // POST: Households/Create

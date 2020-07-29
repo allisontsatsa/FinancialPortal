@@ -4,63 +4,73 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>Transaction</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.BankAccount.Name)
-        </dt>
+<div class="container">
+    <h4>Transaction Details</h4>
+    <table class="notMytable table" style="line-height: 1.5" table-width="100%">
 
-        <dd>
-            @Html.DisplayFor(model => model.BankAccount.Name)
-        </dd>
+        <thead>
+            <tr>
+                <th>
+                    Account Name
+                </th>
+                <th>
+                    Category Item
+                </th>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Transaction Type
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Created)
+                </th>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CategoryItem.Name)
-        </dt>
+            </tr>
+        </thead>
 
-        <dd>
-            @Html.DisplayFor(model => model.CategoryItem.Name)
-        </dd>
+        <tbody>
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => model.BankAccount.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.CategoryItem.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Owner.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.TransactionType.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Created)
+                </td>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Owner.FirstName)
-        </dt>
+            </tr>
+        </tbody>
+    </table>
+    <p>
+        <a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", "Transactions", new { id = Model.Id })">
+            <i class="fas fa-pencil">
+            </i>
+            Edit Transaction
+        </a>
 
-        <dd>
-            @Html.DisplayFor(model => model.Owner.FirstName)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TransactionType.Type)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TransactionType.Type)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Amount)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-
-    </dl>
+        @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
+        <a class="btn btn-secondary btn-sm" onclick="history.back(-1)">
+            <i class="fas fa-arrow-alt-circle-left">
+            </i>
+            Go Back
+            <br />
+        </a>
+    </p>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

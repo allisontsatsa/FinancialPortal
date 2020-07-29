@@ -24,9 +24,10 @@ namespace FinancialPortal.Controllers
                 var categoryItems = db.Categories.Where(c => c.HouseholdId == hhId).SelectMany(c => c.CategoryItems);
 
                 List<BankAccount> accounts = db.BankAccounts.Where(b => b.HouseholdId == hhId).ToList();
-
+                //List<BankAccount> names = db.BankAccounts.Where(n => n.Id == ).ToList();
                 ViewBag.Recent = houseHelper.GetRecentTrans(model.Id);
 
+                ViewBag.BankAccountTypeId = new SelectList(db.BankAccountTypes, "Id", "Type");
                 ViewBag.BankAccountId = new SelectList(accounts, "Id", "Name");
                 ViewBag.TransactionTypeId = new SelectList(db.TransactionTypes, "Id", "Type");
                 ViewBag.CategoryItemId = new SelectList(categoryItems, "Id", "Name");

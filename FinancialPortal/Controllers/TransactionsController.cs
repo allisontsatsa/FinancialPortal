@@ -88,15 +88,15 @@ namespace FinancialPortal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddTransaction(int bankAccountId, int categoryItemId, decimal amount, int transactionTypeId, string memo)
+        public ActionResult AddTransaction(int BankAccountId, int CategoryItemId, decimal? amount, int TransactionTypeId, string memo)
         {
             var transaction = new Transaction
             {
-                BankAccountId = bankAccountId,
-                Amount = amount,
+                BankAccountId = BankAccountId,
+                Amount = amount.Value,
                 Memo = memo,
-                TransactionTypeId = transactionTypeId,
-                CategoryItemId = categoryItemId,
+                TransactionTypeId = TransactionTypeId,
+                CategoryItemId = CategoryItemId,
                 Created = DateTimeOffset.Now,
                 OwnerId = User.Identity.GetUserId()
 
@@ -139,8 +139,10 @@ namespace FinancialPortal.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.BankAccountId = new SelectList(db.BankAccounts, "Id", "Type", transaction.BankAccountId);
-            //ViewBag.CategoryItemId = new SelectList(db.CategoryItems, "Id", "Name", transaction.CategoryItemId);
+
+            var hhId = User.Identity.GetHouseholdId();
+            ViewBag.BankAccountId = new SelectList(db.BankAccounts.Where(b=>b.HouseholdId==hhId), "Id", "Name", transaction.BankAccountId);
+            ViewBag.CategoryItemId = new SelectList(db.CategoryItems, "Id", "Name", transaction.CategoryItemId);
             ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transaction.OwnerId);
             ViewBag.TransactionTypeId = new SelectList(db.TransactionTypes, "Id", "Type", transaction.TransactionTypeId);
             return View(transaction);
@@ -157,7 +159,7 @@ namespace FinancialPortal.Controllers
             {
                 db.Entry(transaction).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.BankAccountId = new SelectList(db.BankAccounts, "Id", "Type", transaction.BankAccountId);
             ViewBag.CategoryItemId = new SelectList(db.CategoryItems, "Id", "Name", transaction.CategoryItemId);

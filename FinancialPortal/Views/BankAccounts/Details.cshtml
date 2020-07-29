@@ -5,7 +5,7 @@
 }
     <div class="container">
         <h4>Account Details</h4>
-  
+
         <table class="notMytable table" style="line-height: 1.5" table-width="100%">
             <thead>
                 <tr>
@@ -60,6 +60,22 @@
                 </tr>
             </tbody>
         </table>
+        <p>
+            <a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", "BankAccounts", new { id = Model.Id })">
+                <i class="fas fa-pencil">
+                </i>
+                Edit Account
+            </a>
+
+
+            @*@Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |*@
+            <a class="btn btn-secondary btn-sm" onclick="history.back(-1)">
+                <i class="fas fa-arrow-alt-circle-left">
+                </i>
+                Go Back
+                <br />
+            </a>
+        </p>
         <br />
         <br />
         <br />
@@ -117,7 +133,7 @@
                             @Model.Created.Date.ToString("MM/dd/yyyy")
                         </td>
                         <td>
-                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("View Details", "Details", "Transactions", new { id = item.Id }, null)
                         </td>
                     </tr>
                 }

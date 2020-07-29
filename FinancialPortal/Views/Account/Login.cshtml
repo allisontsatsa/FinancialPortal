@@ -93,10 +93,10 @@
                     @*</form>*@
                 }
                 @*<div class="social-auth-links text-center mb-3">
-                        <p>- OR -</p>
+            <p>- OR -</p>
 
-                        @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-                    </div>*@
+            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+        </div>*@
                 <!-- /.social-auth-links -->
 
                 <p class="mb-1" style="color: #e2dede">
@@ -105,6 +105,10 @@
                 <p class="mb-0" style="color: #e2dede">
                     @Html.ActionLink("Register as a new user.", "Register", "Account")
                 </p>
+                <p class="mb-0">
+                    @Html.ActionLink("Begin Demo Session.", "DemoLogin", "Account")
+                </p>
+
             </div>
             <!-- /.login-card-body -->
         </div>

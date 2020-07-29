@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using FinancialPortal.Extensions;
 using FinancialPortal.Models;
+using FinancialPortal.ViewModels;
 using Microsoft.AspNet.Identity;
 
 namespace FinancialPortal.Controllers
@@ -19,8 +20,16 @@ namespace FinancialPortal.Controllers
         // GET: Categories
         public ActionResult Index()
         {
-            var categories = db.Categories.Include(c => c.Household);
-            return View(categories.ToList());
+            var hhId = User.Identity.GetHouseholdId();
+            var categories = db.Categories.Where(a => a.HouseholdId == hhId).ToList();
+            var debit = categories.Where(d => d.DebitCredit == false).ToList();
+
+            CategoryViewModel model = new CategoryViewModel();
+            model.Categories = categories;
+            model.DebitTransId = db.TransactionTypes.FirstOrDefault(t => t.Type == "Withdrawal").Id;
+            model.CreditTransId = db.TransactionTypes.FirstOrDefault(t => t.Type == "Deposit").Id;
+
+            return View(model);
         }
 
         // GET: Categories/Details/5
@@ -66,7 +75,7 @@ namespace FinancialPortal.Controllers
 
                 db.Categories.Add(category);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Categories");
             }
 
             //ViewBag.Categories = new SelectList(db.Categories, "Id", "Name", category.Name);
@@ -94,7 +103,7 @@ namespace FinancialPortal.Controllers
                 category.TargetAmount = 0;
                 db.Categories.Add(category);
                 db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Categories");
             }
 
             ViewBag.Categories = new SelectList(db.Categories, "Id", "Name", category.Name);

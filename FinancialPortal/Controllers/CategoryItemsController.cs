@@ -56,7 +56,7 @@ namespace FinancialPortal.Controllers
             {
                 db.CategoryItems.Add(categoryItem);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Categories");
             }
 
             ViewBag.CategoryId = new SelectList(db.Categories, "Id", "Name", categoryItem.CategoryId);

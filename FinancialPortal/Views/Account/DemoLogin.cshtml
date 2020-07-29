@@ -1,0 +1,92 @@
+﻿@{ Layout = null; }
+
+@using FinancialPortal.Models
+@model LoginViewModel
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>This Little Piggy Bank </title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <!-- Theme style -->
+    <link href="~/Content/adminlte.min.css" rel="stylesheet" />
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('../Images/AdobeStock_217761108.jpeg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100%;
+            background-position: center;
+        }
+    </style>
+</head>
+
+
+
+<h2>@ViewBag.Title</h2>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="" id="piggy" />
+            <b>This Little Piggy Bank</b>
+        </div>
+        <!-- /.login-logo -->
+        <div class="card">
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Demo Session Login</p>
+                @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken();
+                    @Html.Hidden("EmailKey", "DemoHeadEmail")
+                    <button type="submit" class="btn btn-secondary"> <i class="fas fa-user">  Begin Demo</i></button>
+                }
+                <div class="col">
+                    @Html.ActionLink("Back to Login", "Login", "Account")
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="~/Scripts/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="~/Scripts/jquery.overlayScrollbars.min.js"></script>
+
+    <!-- PAGE PLUGINS -->
+    <!-- jQuery Mapael -->
+    <script src="~/Scripts/raphael.min.js"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/dataTables.responsive.min.js"></script>
+    <script src="~/Scripts/responsive.bootstrap4.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/Scripts/adminlte.js"></script>
+    <script src="~/Scripts/demo.js"></script>
+    <!-- ChartJS -->
+    <script src="~/Scripts/Chart.min.js"></script>
+
+    @*<script>
+        $("a.nav-link").on("click", function () {
+            $(this).closest("form").submit();
+        })
+    </script>*@
+</body>

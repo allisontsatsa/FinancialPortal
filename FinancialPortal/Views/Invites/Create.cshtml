@@ -8,33 +8,49 @@
     <meta name="viewport" content="width=device-width" />
     <title>Create</title>
 </head>
-<body>
-    @using (Html.BeginForm("CreateAsync", "Invites")) 
-    {
-        @Html.AntiForgeryToken()
-        
-        <div class="form-horizontal">
-            <h4>Invite</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.RecipientEmail, "Receipient Email", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.TextBoxFor(model => model.RecipientEmail, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.RecipientEmail, "", new { @class = "text-danger" })
+<div class="container">
+    <body class="hold-transition login-page">
+        <div class="login-box" id="box">
+            <!-- /.login-logo -->
+            <div class="card" id="register">
+                <div class="card-body login-card-body">
+
+                    @using (Html.BeginForm("CreateAsync", "Invites"))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            <h4>Invite</h4>
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RecipientEmail, "Receipient Email", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.RecipientEmail, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RecipientEmail, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Create" class="btn btn-default" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                <div>
+                    <a class="btn btn-secondary btn-sm" onclick="history.back(-1)">
+                        <i class="fas fa-arrow-alt-circle-left" style="color:#343a40;">
+                            Go Back
+                        </i>
+                        
+                        <br />
+                    </a>
                 </div>
-            </div>
-    
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
                 </div>
             </div>
         </div>
-    }
-    
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+</div>
 </body>
 </html>

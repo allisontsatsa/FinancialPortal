@@ -45,7 +45,7 @@ namespace FinancialPortal.Controllers
         public ActionResult Create()
         {
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name");
-            return View();
+            return View(new Invite());
         }
 
         // POST: Invites/Create
@@ -93,7 +93,7 @@ namespace FinancialPortal.Controllers
             }
 
             ViewBag.HouseholdId = new SelectList(db.Households, "Id", "Name", invite.HouseholdId);
-            return View(invite);
+            return View();
         }
 
         // GET: Invites/Edit/5

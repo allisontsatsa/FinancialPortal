@@ -59,6 +59,7 @@ namespace FinancialPortal.Controllers
             }
         }
 
+        [AllowAnonymous]
         public ActionResult AcceptInvite(string email, string code)
         {
             //grabs the appropriate invite from the invite table
@@ -208,7 +209,7 @@ namespace FinancialPortal.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    if (houseHoldId != null)
+                    if (houseHoldId != null && !string.IsNullOrEmpty(model.Code))
                     {
                         rolehelper.AddUserToRole(user.Id, "Member");
                     }
@@ -573,5 +574,42 @@ namespace FinancialPortal.Controllers
             }
         }
         #endregion
+        // GET: /Account/DemoLogin
+        [AllowAnonymous]
+        public ActionResult DemoLogin(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DemoLoginAsync(string emailKey)
+        {
+            var email = WebConfigurationManager.AppSettings[emailKey];
+            var password = WebConfigurationManager.AppSettings["DemoPassword"];
+
+            var result = await SignInManager.PasswordSignInAsync(email, password, false, shouldLockout: false);
+
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    var usr = await UserManager.FindByEmailAsync(email);
+
+                    if (usr.HouseholdId == null)
+                    {
+                        return RedirectToAction("Dashboard", "Households");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                case SignInStatus.Failure:
+                default:
+                    return RedirectToAction("Login", "Account");
+            }
+        }
+
     }
 }
